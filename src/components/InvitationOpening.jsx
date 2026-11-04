@@ -31,6 +31,9 @@ export default function InvitationOpening({ onOpen }) {
     if (opening) return;
     setOpening(true);
 
+    // Trigger wedding audio immediately on user gesture
+    window.dispatchEvent(new CustomEvent("play-wedding-audio"));
+
     // Initial confetti burst on wax seal crack
     let origin = { x: 0.5, y: 0.55 };
     if (e && e.clientX) {
@@ -99,7 +102,10 @@ export default function InvitationOpening({ onOpen }) {
       <div className="absolute top-4 inset-x-4 sm:inset-x-8 z-40 flex items-center justify-between">
         <button
           type="button"
-          onClick={onOpen}
+          onClick={() => {
+            window.dispatchEvent(new CustomEvent("play-wedding-audio"));
+            onOpen();
+          }}
           className="flex items-center gap-1.5 rounded-full border border-gold/40 bg-[#0B0114]/80 backdrop-blur px-3.5 py-1.5 text-xs text-gold transition hover:bg-gold hover:text-[#12011F]"
         >
           <span>{t.skipToInvite}</span>

@@ -55,9 +55,11 @@ function InvitationPage() {
           <ShareInvitation />
           <Footer />
           <FloatingWhatsApp />
-          <AudioPlayer />
         </motion.main>
       )}
+
+      {/* Global AudioPlayer: preloads nasheed and plays by default across all screens */}
+      <AudioPlayer />
     </div>
   );
 }

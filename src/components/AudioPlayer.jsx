@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
-import { Music, Pause, Play, Volume2, VolumeX, Sparkles } from "lucide-react";
+import { Music, Pause, Play, Volume2, VolumeX } from "lucide-react";
 import { useLanguage } from "../context/LanguageContext";
 import { invitation } from "../data/invitation";
 import { startAmbientSound, stopAmbientSound } from "../utils/audioSynth";
@@ -12,17 +12,62 @@ export default function AudioPlayer() {
   const [playing, setPlaying] = useState(false);
   const [muted, setMuted] = useState(false);
   const [usingSynth, setUsingSynth] = useState(false);
-  const [showTooltip, setShowTooltip] = useState(true);
 
+  // Play handler with synth fallback
+  const startPlayback = () => {
+    const audio = audioRef.current;
+    if (!audio) return;
+
+    if (usingSynth) {
+      startAmbientSound();
+      setPlaying(true);
+      return;
+    }
+
+    const promise = audio.play();
+    if (promise !== undefined) {
+      promise
+        .then(() => {
+          setPlaying(true);
+        })
+        .catch(() => {
+          // If browser policy blocks direct autoplay, wait for the first user interaction
+        });
+    }
+  };
+
+  // Attempt autoplay immediately on mount + listen for any user interaction or custom event
   useEffect(() => {
-    const timer = setTimeout(() => {
-      setShowTooltip(false);
-    }, 8000);
-    return () => clearTimeout(timer);
-  }, []);
+    // 1. Try to autoplay right away
+    startPlayback();
 
-  const togglePlay = async () => {
-    setShowTooltip(false);
+    // 2. Global user interaction listener to bypass browser autoplay restrictions
+    const handleFirstInteraction = () => {
+      startPlayback();
+      window.removeEventListener("click", handleFirstInteraction);
+      window.removeEventListener("touchstart", handleFirstInteraction);
+      window.removeEventListener("keydown", handleFirstInteraction);
+    };
+
+    window.addEventListener("click", handleFirstInteraction, { once: true });
+    window.addEventListener("touchstart", handleFirstInteraction, { once: true });
+    window.addEventListener("keydown", handleFirstInteraction, { once: true });
+
+    // 3. Listen for explicit custom event (e.g. from wax seal click or skip button)
+    const handleCustomTrigger = () => {
+      startPlayback();
+    };
+    window.addEventListener("play-wedding-audio", handleCustomTrigger);
+
+    return () => {
+      window.removeEventListener("click", handleFirstInteraction);
+      window.removeEventListener("touchstart", handleFirstInteraction);
+      window.removeEventListener("keydown", handleFirstInteraction);
+      window.removeEventListener("play-wedding-audio", handleCustomTrigger);
+    };
+  }, [usingSynth]);
+
+  const togglePlay = () => {
     const audio = audioRef.current;
 
     if (playing) {
@@ -32,32 +77,16 @@ export default function AudioPlayer() {
         audio.pause();
       }
       setPlaying(false);
-      return;
+    } else {
+      startPlayback();
     }
-
-    // Try playing the mp3 file first
-    if (audio && !usingSynth) {
-      try {
-        await audio.play();
-        setPlaying(true);
-        return;
-      } catch {
-        // Fallback to ambient Web Audio synth if mp3 is missing or blocked
-        setUsingSynth(true);
-        startAmbientSound();
-        setPlaying(true);
-        return;
-      }
-    }
-
-    // Direct synth toggle
-    startAmbientSound();
-    setPlaying(true);
   };
 
   const handleAudioError = () => {
-    // Graceful switch to synth generator
+    // Switch to synth generator if mp3 fails
     setUsingSynth(true);
+    startAmbientSound();
+    setPlaying(true);
   };
 
   const toggleMute = () => {
@@ -72,28 +101,13 @@ export default function AudioPlayer() {
       <audio
         ref={audioRef}
         src={invitation.audioSrc}
-        preload="none"
+        preload="auto"
         loop
         muted={muted}
         onPlay={() => setPlaying(true)}
         onPause={() => setPlaying(false)}
         onError={handleAudioError}
       />
-
-      {/* Floating Tooltip Prompt */}
-      <AnimatePresence>
-        {showTooltip && !playing && (
-          <motion.div
-            initial={{ opacity: 0, x: -10 }}
-            animate={{ opacity: 1, x: 0 }}
-            exit={{ opacity: 0, scale: 0.9 }}
-            className="rounded-full border border-gold/60 bg-deep/95 px-3 py-1.5 text-xs text-gold shadow-lg backdrop-blur flex items-center gap-1.5"
-          >
-            <Sparkles size={12} className="text-gold animate-spin" />
-            <span>{t.musicPrompt}</span>
-          </motion.div>
-        )}
-      </AnimatePresence>
 
       {/* Expanded Control Box */}
       <AnimatePresence>
@@ -103,17 +117,17 @@ export default function AudioPlayer() {
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 10, scale: 0.95 }}
             transition={{ duration: 0.2 }}
-            className="w-64 rounded-2xl border-2 border-gold/70 bg-[#240035]/95 p-4 text-white shadow-2xl backdrop-blur-md"
+            className="w-64 rounded-2xl border-2 border-gold/70 bg-[#160124]/95 p-4 text-white shadow-2xl backdrop-blur-md"
           >
             <div className="flex items-center justify-between pb-3 mb-3 border-b border-gold/30">
               <span className="font-serif text-sm font-semibold text-gold">
                 {t.music}
               </span>
               {playing && (
-                <div className="flex items-end gap-0.5 h-3">
-                  <span className="w-1 bg-gold h-3 animate-pulse" />
+                <div className="flex items-end gap-1 h-3.5">
+                  <span className="w-1 bg-gold h-3.5 animate-pulse" />
                   <span className="w-1 bg-gold h-2 animate-pulse" style={{ animationDelay: "0.2s" }} />
-                  <span className="w-1 bg-gold h-3.5 animate-pulse" style={{ animationDelay: "0.4s" }} />
+                  <span className="w-1 bg-gold h-4 animate-pulse" style={{ animationDelay: "0.4s" }} />
                   <span className="w-1 bg-gold h-1.5 animate-pulse" style={{ animationDelay: "0.1s" }} />
                 </div>
               )}
@@ -123,7 +137,7 @@ export default function AudioPlayer() {
               <button
                 type="button"
                 onClick={togglePlay}
-                className="flex-1 inline-flex items-center justify-center gap-2 rounded-full bg-gradient-to-r from-gold via-yellow-200 to-gold px-4 py-2 text-xs font-bold text-deep transition-all hover:scale-105 active:scale-95 shadow-md"
+                className="flex-1 inline-flex items-center justify-center gap-2 rounded-full bg-gradient-to-r from-gold via-yellow-200 to-gold px-4 py-2 text-xs font-bold text-[#140024] transition-all hover:scale-105 active:scale-95 shadow-md"
               >
                 {playing ? <Pause size={15} /> : <Play size={15} />}
                 <span>{playing ? t.pause : t.play}</span>
@@ -142,17 +156,17 @@ export default function AudioPlayer() {
         )}
       </AnimatePresence>
 
-      {/* Floating Music Button with Pulsing Wave */}
+      {/* Floating Music Button with Pulsing Glow */}
       <button
         type="button"
         onClick={() => setOpen((o) => !o)}
         aria-expanded={open}
         aria-label={t.music}
         title={t.music}
-        className="relative flex h-14 w-14 items-center justify-center rounded-full border-2 border-gold bg-gradient-to-br from-primary via-[#53096e] to-deep text-gold shadow-[0_4px_20px_rgba(212,175,55,0.4)] transition-all duration-300 hover:scale-110 active:scale-95"
+        className="relative flex h-14 w-14 items-center justify-center rounded-full border-2 border-gold bg-gradient-to-br from-[#2D0442] via-[#480866] to-[#160124] text-gold shadow-[0_4px_20px_rgba(212,175,55,0.45)] transition-all duration-300 hover:scale-110 active:scale-95"
       >
         {playing && (
-          <span className="absolute -inset-1 rounded-full border border-gold/60 animate-ping opacity-60" />
+          <span className="absolute -inset-1 rounded-full border border-gold/70 animate-ping opacity-60" />
         )}
         <Music size={22} className={playing ? "animate-bounce" : ""} />
       </button>

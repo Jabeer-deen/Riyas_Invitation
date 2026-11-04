@@ -21,14 +21,14 @@ export default function CalendarButton() {
           <span>{t.googleCalendar}</span>
         </a>
 
-        <button
+        {/* <button
           type="button"
           onClick={downloadIcs}
           className="inline-flex items-center gap-2 rounded-full border border-gold/40 bg-deep/60 px-5 py-2.5 text-xs sm:text-sm font-medium text-lavender transition-all duration-300 hover:border-gold hover:text-gold"
         >
           <Download size={16} aria-hidden="true" />
           <span>{t.downloadIcs}</span>
-        </button>
+        </button> */}
       </div>
     </div>
   );

@@ -1,0 +1,123 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+html {
+  scroll-behavior: smooth;
+  background-color: #06000b !important;
+}
+
+body, #root {
+  background-color: #06000b !important;
+  color: #EDE4D3 !important;
+  min-height: 100vh;
+}
+
+body {
+  @apply antialiased overflow-x-hidden selection:bg-gold/30 selection:text-gold;
+}
+
+/* Deep Midnight Obsidian Royal Velvet Theme */
+.bg-royal-dark, .bg-royal {
+  background-color: #06000b !important;
+  background-image:
+    radial-gradient(circle at 50% 50%, rgba(212, 175, 55, 0.12) 0 1.8px, transparent 2.5px),
+    radial-gradient(circle at 0 0, rgba(212, 175, 55, 0.06) 0 1.2px, transparent 2.2px),
+    radial-gradient(ellipse at 50% 0%, #1c032e 0%, #0d0116 50%, #050008 100%) !important;
+  background-size: 32px 32px, 32px 32px, 100% 100% !important;
+}
+
+.bg-royal-deep {
+  background-color: #06000a !important;
+  background-image:
+    radial-gradient(circle at 50% 50%, rgba(212, 175, 55, 0.1) 0 1.8px, transparent 2.5px),
+    radial-gradient(circle at 0 0, rgba(212, 175, 55, 0.05) 0 1.2px, transparent 2.2px),
+    linear-gradient(180deg, #07000c 0%, #13011f 50%, #06000a 100%) !important;
+  background-size: 32px 32px, 32px 32px, 100% 100% !important;
+}
+
+.bg-royal-card {
+  background: rgba(13, 1, 22, 0.9);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(212, 175, 55, 0.45);
+  box-shadow: 0 16px 45px -10px rgba(0, 0, 0, 0.85), 0 0 25px 0 rgba(212, 175, 55, 0.12);
+}
+
+/* Islamic pattern overlay */
+.islamic-pattern {
+  background-color: #06000b;
+  background-image:
+    radial-gradient(circle at 50% 50%, rgba(212, 175, 55, 0.12) 0 1.8px, transparent 2.5px),
+    radial-gradient(circle at 0 0, rgba(212, 175, 55, 0.06) 0 1.2px, transparent 2.2px);
+  background-size: 32px 32px, 32px 32px;
+}
+
+/* Floating celebratory petals */
+.petal {
+  position: absolute;
+  top: -8%;
+  border-radius: 50% 0 50% 0;
+  background: linear-gradient(135deg, rgba(255, 248, 225, 0.9), rgba(233, 213, 255, 0.6));
+  opacity: 0.65;
+  animation-name: petal-fall;
+  animation-timing-function: cubic-bezier(0.25, 0.1, 0.25, 1);
+  animation-iteration-count: infinite;
+  pointer-events: none;
+}
+
+@keyframes petal-fall {
+  0% {
+    transform: translateY(0) rotate(0deg) translateX(0);
+  }
+  50% {
+    transform: translateY(60vh) rotate(180deg) translateX(25px);
+  }
+  100% {
+    transform: translateY(120vh) rotate(360deg) translateX(-15px);
+  }
+}
+
+/* Gold shimmer gradient for titles */
+@keyframes gold-shimmer {
+  0% {
+    background-position: -200% center;
+  }
+  100% {
+    background-position: 200% center;
+  }
+}
+
+.shimmer-gold {
+  background: linear-gradient(90deg, #d4af37 0%, #fff2b2 30%, #ffd700 50%, #f5d061 70%, #d4af37 100%);
+  background-size: 200% auto;
+  color: transparent;
+  -webkit-background-clip: text;
+  background-clip: text;
+  animation: gold-shimmer 6s ease-in-out infinite;
+}
+
+/* Component Buttons */
+@layer components {
+  .btn-primary {
+    @apply inline-flex items-center justify-center gap-2 rounded-full bg-gradient-to-r from-[#D4AF37] via-[#FFF0A0] to-[#D4AF37] px-7 py-3.5 font-medium text-[#140024] font-semibold shadow-[0_4px_20px_rgba(212,175,55,0.4)] transition-all duration-300 hover:scale-[1.03] hover:shadow-[0_0_28px_rgba(212,175,55,0.6)] active:scale-95;
+  }
+  .btn-gold {
+    @apply inline-flex items-center justify-center gap-2 rounded-full bg-gradient-to-r from-[#D4AF37] via-[#FFF0A0] to-[#D4AF37] px-7 py-3.5 font-medium text-[#140024] font-semibold shadow-[0_4px_20px_rgba(212,175,55,0.4)] transition-all duration-300 hover:scale-[1.03] hover:brightness-105 hover:shadow-[0_0_28px_rgba(212,175,55,0.6)] active:scale-95;
+  }
+  .btn-outline-gold {
+    @apply inline-flex items-center justify-center gap-2 rounded-full border border-gold/80 bg-gold/10 px-6 py-3 font-medium text-gold transition-all duration-300 hover:bg-gold hover:text-[#140024] hover:shadow-[0_0_20px_rgba(212,175,55,0.35)] active:scale-95;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .petal {
+    display: none;
+  }
+  html {
+    scroll-behavior: auto;
+  }
+  .shimmer-gold {
+    animation: none;
+  }
+}

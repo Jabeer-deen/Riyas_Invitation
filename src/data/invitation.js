@@ -29,7 +29,7 @@ export const invitation = {
   date: {
     day: "Sunday",
     dateFormatted: "22 November 2026",
-    hijriDate: "13 Jumada al-Awwal 1448 AH",
+    hijriDate: "Jumada al-Akhirah 12",
     time: "12:00 PM (Noon)",
   },
   mapQuery: "Vasantham Marriage Mahal, North Manamelkudi, Tamil Nadu",

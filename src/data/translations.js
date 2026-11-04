@@ -4,7 +4,7 @@
 export const translations = {
   en: {
     pageTitle: "Nikkah Invitation – H. Abdul Riyas Khan & S. Shabana Begum",
-    navBrand: "Royal Nikkah",
+    navBrand: "Riyas's Nikkah",
     navCouple: "Couple",
     navSchedule: "Schedule",
     navVenue: "Venue",
@@ -33,7 +33,7 @@ export const translations = {
     togetherForever: "Two Souls Bound by Faith, Love & Barakah",
 
     dateText: "Sunday, 22 November 2026",
-    hijriDate: "13 Jumada al-Awwal 1448 AH",
+    hijriDate: "Jumada al-Akhirah 12",
     timeText: "12:00 PM (Noon)",
 
     countdownTitle: "Counting Down to the Blessed Moment",
@@ -158,7 +158,7 @@ export const translations = {
     togetherForever: "இறை நம்பிக்கையாலும் அன்பாலும் இணையும் இரு நல் இதயங்கள்",
 
     dateText: "ஞாயிற்றுக்கிழமை, 22 நவம்பர் 2026",
-    hijriDate: "13 ஜுமாதல் அவ்வல் 1448 ஹிஜ்ரி",
+    hijriDate: "Jumada al-Akhirah 12",
     timeText: "மதியம் 12:00 (நண்பகல்)",
 
     countdownTitle: "பாக்கியமிக்க நன்னாளுக்கான கவுண்டவுன்",

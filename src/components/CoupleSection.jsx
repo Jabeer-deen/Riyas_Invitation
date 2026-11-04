@@ -77,7 +77,7 @@ export default function CoupleSection() {
   const { t } = useLanguage();
 
   return (
-    <section id="couple" className="relative px-4 py-20 bg-[#0A0113] text-white islamic-pattern">
+    <section id="couple" className="relative px-4 pb-20 bg-[#0A0113] text-white islamic-pattern">
       <div className="mx-auto max-w-5xl relative z-10">
         <div className="text-center mb-14">
           <GoldDivider className="mb-4" />

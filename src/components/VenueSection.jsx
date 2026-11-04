@@ -30,7 +30,7 @@ export default function VenueSection() {
   };
 
   return (
-    <section id="venue" className="relative px-4 py-20 bg-[#0A0113] text-white islamic-pattern">
+    <section id="venue" className="relative px-4 pb-20 bg-[#0A0113] text-white islamic-pattern">
       <div className="mx-auto max-w-4xl text-center relative z-10">
         <GoldDivider className="mb-4" />
         <h2 className="font-serif text-3xl sm:text-4xl lg:text-5xl font-bold shimmer-gold">

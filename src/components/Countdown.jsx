@@ -40,7 +40,7 @@ export default function Countdown() {
           </span>
           <span className="inline-flex items-center gap-1.5 rounded-full border border-gold/40 bg-[#0E0117]/90 px-4 py-1.5 shadow-sm text-gold">
             <Moon size={15} className="text-gold" />
-            <span className="font-medium text-[#EDE4D3]/90">{invitation.date.hijriDate}</span>
+            <span className="font-medium text-[#EDE4D3]/90">{t.hijriDate || invitation.date.hijriDate}</span>
           </span>
         </div>
 
